@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#050507">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Crepes Sweet | من هنا كانت بدايتنا</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&family=Pacifico&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{--bg:#050507;--line:rgba(255,255,255,.1);--teal:#0fb5a0;--pink:#ff2e7e;--gold:#ffbe3c;--mut:#9a93a8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cairo';background:var(--bg);color:#f5f0e8;overflow:hidden}
+a{color:inherit}
+::selection{background:var(--pink)}
+/* ===== PAGES ===== */
+.page{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transform-style:preserve-3d;background:var(--bg);z-index:1;scrollbar-width:thin;scrollbar-color:#333 #050507}
+.page.on{opacity:1;visibility:visible;z-index:2}
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;border-radius:99px;padding:13px 34px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:.3s;font-size:1rem}
+.btn-w{background:#fff;color:#000;box-shadow:0 14px 40px rgba(255,255,255,.18)}
+.btn-w:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 20px 50px rgba(255,255,255,.3)}
+.btn-o{background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;backdrop-filter:blur(12px)}
+.btn-o:hover{border-color:#fff;transform:translateY(-3px)}
+.back{position:fixed;top:16px;right:16px;z-index:60;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;transition:.3s}
+.back:hover{background:#fff;color:#000}
+/* ===== PAGE 1 : WHEEL ===== */
+#pg1{display:block;padding:0;
+ background:radial-gradient(900px 600px at 50% 42%,rgba(15,181,160,.12),transparent),radial-gradient(700px 500px at 50% 120%,rgba(255,46,126,.1),transparent)}
+/* فيديو ملء الشاشة */
+#p1video{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:0;background:#000}
+#p1vid{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;background:#000}
+#p1bg{position:fixed;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;overflow:hidden;
+ background:radial-gradient(800px 500px at 50% 40%,#0c3f39,#050507 70%)}
+#p1bg .biglogo{width:min(420px,70vw);height:min(420px,70vw);border-radius:50%;object-fit:cover;opacity:.55;filter:blur(1px);animation:bgspin 24s linear infinite;box-shadow:0 0 120px rgba(15,181,160,.35)}
+@keyframes bgspin{to{transform:rotate(360deg)}}
+#p1bg .part{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.6;animation:pfloat 6s ease-in-out infinite}
+@keyframes pfloat{50%{transform:translateY(-40px) scale(1.4);opacity:1}}
+/* طبقة التعتيم فوق الفيديو + المحتوى */
+#p1over{position:relative;z-index:5;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:90px 5vw 40px;
+ background:linear-gradient(180deg,rgba(5,5,7,.72) 0%,rgba(5,5,7,.25) 35%,rgba(5,5,7,.35) 65%,rgba(5,5,7,.88) 100%)}
+.p1-welcome{font-weight:800;color:var(--gold);letter-spacing:1px;font-size:clamp(1rem,2.6vw,1.5rem);text-align:center;opacity:0;text-shadow:0 3px 18px rgba(0,0,0,.9)}
+.p1-welcome small{display:block;color:#e8e2d5;font-weight:600;font-size:.82rem;margin-top:4px;text-shadow:0 2px 10px rgba(0,0,0,.9)}
+.p1-title{text-align:center;opacity:0}
+.p1-title h1{font-size:clamp(2.6rem,9vw,6rem);font-weight:900;line-height:1;letter-spacing:-1px;text-shadow:0 6px 30px rgba(0,0,0,.85)}
+.p1-title h1 .out{color:transparent;-webkit-text-stroke:2.5px #fff}
+.p1-title h1 .fill{background:linear-gradient(90deg,var(--gold),var(--pink),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.p1-title p{color:#e8e2d5;margin-top:10px;font-size:clamp(.85rem,2vw,1.05rem);text-shadow:0 2px 12px rgba(0,0,0,.9)}
+.p1-cta{margin-top:18px;opacity:0;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.p1-note{color:#b7ae9c;font-size:.74rem;margin-top:10px;letter-spacing:2px;text-shadow:0 2px 8px #000}
+.p1-skip{position:fixed;top:18px;left:18px;z-index:30;font-size:.78rem;color:#cfc8db;background:rgba(0,0,0,.45);border:1px solid var(--line);padding:7px 14px;border-radius:99px;text-decoration:none;backdrop-filter:blur(10px)}
+.p1-skip:hover{background:rgba(0,0,0,.7)}
+/* ===== PAGE 2 : CHEF ===== */
+#pg2{display:flex;flex-direction:column;align-items:center;padding:70px 5vw 50px;
+ background:radial-gradient(800px 400px at 50% -10%,rgba(255,190,60,.12),transparent),radial-gradient(700px 500px at 80% 110%,rgba(15,181,160,.12),transparent)}
+.welcome-h{text-align:center;font-size:clamp(1.9rem,5.5vw,3.4rem);font-weight:900;margin-bottom:6px}
+.welcome-h .grad{background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.welcome-sub{color:var(--mut);text-align:center;margin-bottom:26px}
+.chef-row{display:grid;grid-template-columns:340px 1fr;gap:26px;max-width:1000px;width:100%;align-items:center}
+@media(max-width:840px){.chef-row{grid-template-columns:1fr}}
+.chef-photo{perspective:1000px}
+.chef-in{border-radius:26px;overflow:hidden;border:1px solid var(--line);position:relative;transform-style:preserve-3d;transition:.15s;box-shadow:0 30px 80px rgba(0,0,0,.6);background:#0d0d12}
+.chef-in img{width:100%;height:460px;object-fit:cover;display:block}
+.chef-fb{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#0d0d12;font-size:80px}
+.chef-badge{position:absolute;bottom:14px;right:14px;left:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.chef-badge span{background:rgba(0,0,0,.62);backdrop-filter:blur(10px);border:1px solid var(--line);padding:7px 14px;border-radius:99px;font-size:.78rem;font-weight:700}
+.speech{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:26px;padding:28px;backdrop-filter:blur(20px);position:relative}
+.speech h3{font-size:1.3rem;margin-bottom:8px;color:var(--gold)}
+.speech p{color:#c9c2d6;line-height:2.1;font-size:1rem}
+.speech .sign{margin-top:14px;font-family:'Pacifico';color:var(--pink);font-size:1.3rem}
+/* تايتل MENU — كيما CREPES : مفرّغ + معبّي بالأصفر و الأزرق */
+.menu-title{text-align:center;font-size:clamp(2.4rem,8vw,4.8rem);font-weight:900;line-height:1;letter-spacing:-1px;margin:0 auto 26px;display:block}
+.menu-title .m-out{color:transparent;-webkit-text-stroke:2.5px var(--gold)}
+.menu-title .m-fill{background:linear-gradient(180deg,#3ec6ff,#0a6ec9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* لوقو الفايسبوك : زر دائري أزرق */
+.fb-top{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1877F2,#0a3d8f);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(24,119,242,.45);transition:.3s;flex-shrink:0}
+.fb-top:hover{transform:scale(1.1)}
+.btn-fb{background:linear-gradient(135deg,#1877F2,#0a3d8f);color:#fff;border:none}
+.btn-fb:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 36px rgba(24,119,242,.5)}
+.p2-cta{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+/* ===== PAGE 3 : MENU ===== */
+#pg3{background:var(--bg)}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:13px 4vw;background:rgba(5,5,7,.75);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--gold)}
+.brand .fb{width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#1bd9bd,#06322c);display:flex;align-items:center;justify-content:center;font-size:25px;border:2px solid var(--gold)}
+.brand b{font-size:1rem;display:block}.brand b span{color:var(--pink)}.brand small{font-size:.62rem;letter-spacing:3px;color:var(--mut)}
+.menu{display:flex;gap:20px;font-weight:700;font-size:.9rem}
+.menu a{text-decoration:none;color:#cfc8db}.menu a:hover{color:#fff}
+#burger{display:none;font-size:24px;cursor:pointer}
+.hero3d{text-align:center;padding:70px 5vw 40px;position:relative;overflow:hidden;
+ background:radial-gradient(800px 300px at 50% 0%,rgba(15,181,160,.15),transparent)}
+.hero3d h2{font-size:clamp(2.2rem,7vw,4.6rem);font-weight:900;line-height:1}
+.hero3d h2 .out{color:transparent;-webkit-text-stroke:2px #fff}
+.hero3d h2 .fill{background:linear-gradient(90deg,var(--gold),var(--pink),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero3d p{color:var(--mut);margin-top:10px}
+.specs{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:18px;color:var(--mut);font-size:.84rem}
+.specs b{color:#fff}
+section{padding:56px 5vw;max-width:1240px;margin:auto}
+.sec-tag{color:var(--teal);font-weight:800;letter-spacing:3px;font-size:.76rem}
+.sec-h{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;margin:6px 0}
+.sec-p{color:var(--mut)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.filters button{background:transparent;border:1px solid var(--line);color:#cfc8db;padding:9px 18px;border-radius:99px;font-family:inherit;font-weight:800;cursor:pointer;transition:.25s}
+.filters button.on,.filters button:hover{background:#fff;color:#000;border-color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:20px;overflow:hidden;backdrop-filter:blur(16px);transition:.25s}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,190,60,.5)}
+.card .t{height:150px;display:flex;align-items:center;justify-content:center;font-size:70px}
+.card .b{padding:16px}.card .b h3{font-size:1rem}.card .b p{color:var(--mut);font-size:.85rem;min-height:40px}
+.card .pr{color:var(--gold);font-weight:900;margin-top:6px}
+.card .row{display:flex;gap:8px;margin-top:10px}
+.wa{flex:1;background:#25D366;border:none;color:#fff;font-weight:800;border-radius:12px;padding:10px;cursor:pointer;font-family:inherit}
+.wa:hover{filter:brightness(1.12)}
+.tel{background:transparent;border:1px solid var(--line);color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:20px}
+.gal .g{height:220px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#101016;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative}
+.gal .g img{width:100%;height:100%;object-fit:cover}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:840px){.cgrid{grid-template-columns:1fr}.menu{display:none;position:absolute;top:100%;right:4vw;left:4vw;background:#0d0d12;border:1px solid var(--line);border-radius:16px;padding:16px;flex-direction:column}#burger{display:block}.menu.open{display:flex}}
+.box{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:24px;padding:26px;backdrop-filter:blur(18px)}
+.bigphone{display:block;direction:ltr;text-align:center;font-size:1.9rem;font-weight:900;color:#fff;text-decoration:none;margin:8px 0}
+.bigphone:hover{color:var(--gold)}
+.wabig{display:block;text-align:center;background:linear-gradient(135deg,#25D366,#0c7a34);color:#fff;font-weight:900;padding:14px;border-radius:15px;text-decoration:none;margin-top:8px}
+.fbbig{display:block;text-align:center;background:linear-gradient(135deg,#1877F2,#0a3d8f);color:#fff;font-weight:900;padding:14px;border-radius:15px;text-decoration:none;margin-top:8px}
+footer{text-align:center;padding:30px;color:var(--mut);font-size:.9rem;border-top:1px solid var(--line)}
+#waF{position:fixed;bottom:20px;left:20px;z-index:200;width:58px;height:58px;border-radius:50%;background:#25D366;display:none;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 12px 30px rgba(37,211,102,.5)}
+/* ===== MOBILE / PHONE VIEWER ===== */
+html,body{height:100%;height:100dvh}
+@media(max-width:840px){
+  /* الفيديو يملأ شاشة الهاتف الحقيقية (مع شريط المتصفح) */
+  #p1video,#p1vid,#p1bg{position:fixed;inset:0;width:100%;height:100dvh}
+  #p1vid{object-fit:cover;object-position:center}
+  #p1over{min-height:100dvh;padding:calc(70px + env(safe-area-inset-top)) 6vw calc(30px + env(safe-area-inset-bottom));gap:10px;justify-content:flex-end;padding-bottom:calc(46px + env(safe-area-inset-bottom))}
+  .p1-welcome{font-size:1.05rem;margin-bottom:auto;margin-top:calc(10px + env(safe-area-inset-top))}
+  .p1-title h1{font-size:clamp(2.4rem,13vw,3.6rem);letter-spacing:-1px}
+  .p1-title p{font-size:.88rem;margin-top:6px}
+  /* أزرار كبيرة للإبهام + عمودية */
+  .p1-cta{flex-direction:column;width:100%;max-width:340px;gap:10px;margin-top:14px}
+  .p1-cta .btn{width:100%;justify-content:center;padding:16px 20px;font-size:1.08rem;min-height:54px}
+  .p1-note{font-size:.7rem;letter-spacing:1px;margin-bottom:4px}
+  .p1-skip{top:auto;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);font-size:.72rem;padding:6px 12px}
+  /* فيديو فايسبوك : التحكم في أرضية اللعب */
+  #p1video{border:0}
+  /* الأزرار العامة */
+  .btn{min-height:48px;padding:13px 26px;font-size:1rem}
+  /* الصفحة الثانية */
+  #pg2{padding:calc(60px + env(safe-area-inset-top)) 5vw calc(40px + env(safe-area-inset-bottom))}
+  .welcome-h{font-size:clamp(1.6rem,7vw,2.2rem)}
+  .chef-in img{height:380px}
+  .speech{padding:22px}
+  .speech p{font-size:.95rem;line-height:1.95}
+  .p2-cta{flex-direction:column;width:100%;max-width:340px}
+  .p2-cta .btn{width:100%;justify-content:center;padding:15px;font-size:1.05rem;min-height:52px}
+  .back{width:42px;height:42px;top:calc(12px + env(safe-area-inset-top));right:12px}
+  /* الصفحة الثالثة */
+  .topbar{padding:10px 4vw;padding-top:calc(10px + env(safe-area-inset-top))}
+  .brand img,.brand .fb{width:42px;height:42px;font-size:21px}
+  .brand b{font-size:.9rem}
+  .topbar .btn{padding:8px 12px;font-size:.78rem;min-height:40px}
+  .hero3d{padding:46px 5vw 30px}
+  .hero3d h2{font-size:clamp(2rem,11vw,3rem)}
+  .specs{gap:10px;font-size:.76rem}
+  section{padding:42px 5vw}
+  /* المنيو : عمودين على الهاتف */
+  .grid{grid-template-columns:repeat(2,1fr);gap:11px}
+  .card .t{height:105px;font-size:52px}
+  .card .b{padding:12px}
+  .card .b h3{font-size:.88rem}
+  .card .b p{font-size:.76rem;min-height:34px}
+  .card .pr{font-size:.9rem}
+  .card .row{flex-direction:column;gap:6px}
+  .wa{padding:11px;font-size:.85rem}
+  .tel{padding:10px;text-align:center}
+  .filters{gap:6px}
+  .filters button{padding:8px 14px;font-size:.82rem}
+  /* الصور */
+  .gal{grid-template-columns:repeat(2,1fr);gap:10px}
+  .gal .g{height:150px;font-size:44px}
+  /* الاتصال */
+  .bigphone{font-size:1.5rem}
+  .cgrid{gap:14px}
+  .box{padding:20px}
+  #waF{width:54px;height:54px;bottom:calc(16px + env(safe-area-inset-bottom));left:14px;font-size:26px}
+  footer{padding:24px 16px;font-size:.82rem}
+}
+/* شاشات صغيرة جدا */
+@media(max-width:380px){
+  .p1-title h1{font-size:2.2rem}
+  .grid{grid-template-columns:1fr 1fr;gap:8px}
+  .card .t{height:90px;font-size:44px}
+  .filters button{padding:7px 11px;font-size:.76rem}
+}
+/* وضع التماس : بدون hover */
+@media(hover:none){
+  .btn-w:hover,.btn-o:hover,.card:hover{transform:none}
+}
+/* loader */
+#loader{position:fixed;inset:0;z-index:9999;background:#050507;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;transition:.6s}
+#loader.hide{opacity:0;visibility:hidden}
+#loader img{width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);animation:pulse 1.3s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.loadbar{width:210px;height:6px;background:#1c1c24;border-radius:99px;overflow:hidden}
+.loadbar i{display:block;height:100%;width:40%;background:linear-gradient(90deg,var(--teal),var(--gold),var(--pink));animation:ld 1s infinite linear}
+@keyframes ld{from{transform:translateX(210px)}to{transform:translateX(-210px)}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <img src="assets/logo.jpg?v=3" onerror="this.src='assets/logo.png?v=3'" alt="logo">
+  <div style="font-weight:900">Crepes <span style="color:var(--pink)">Sweet</span></div>
+  <div class="loadbar"><i></i></div>
+</div>
+
+<!-- ============ PAGE 1 : فيديو ملء الشاشة + الكتيبات فوقو ============ -->
+<div class="page on" id="pg1">
+  <video id="p1vid" autoplay muted loop playsinline></video>
+  <iframe id="p1video" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="display:none"></iframe>
+  <div id="p1bg">
+    <img src="assets/logo.jpg?v=4" class="biglogo" onerror="this.style.display='none'" alt="">
+  </div>
+  <div id="p1over">
+    <div class="p1-welcome" id="p1w">من هنا كانت بدايتنا و ستبقا تذكارنا<small>Crepes Sweet — Salé & Sucré — عين وسارة</small></div>
+    <div class="p1-title" id="p1t">
+      <h1><span class="out">CREPES</span> <span class="fill">SWEET</span></h1>
+    </div>
+    <div class="p1-cta" id="p1c">
+      <button class="btn btn-w" onclick="goPage('pg2')">🏠 Home</button>
+      <a class="btn btn-fb" href="https://www.facebook.com/kada.katalony" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.5h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+        فيسبوك
+      </a>
+    </div>
+    <div class="p1-note">📞 0793655512 — 📍 عين وسارة</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 : الشاف ============ -->
+<div class="page" id="pg2">
+  <button class="back" onclick="goPage('pg1',-1)" title="رجوع">▶</button>
+  <div class="welcome-h" id="p2h"><span class="grad">مرحبا بكم في محلكم</span> 🏠</div>
+  <div class="welcome-sub" id="p2s">Crepes Sweet • Djelfa / Ain Oussara • Salé & Sucré</div>
+  <div class="chef-row">
+    <div class="chef-photo" id="p2p">
+      <div class="chef-in" id="chefIn">
+        <img src="assets/owner.jpg?v=3" onerror="if(!this.dataset.t){this.dataset.t=1;this.src='assets/owner.png?v=3'}else{this.style.display='none';document.querySelector('.chef-fb').style.display='flex'}" alt="الشاف">
+        <div class="chef-fb">👨‍🍳</div>
+      </div>
+    </div>
+    <div class="speech" id="p2b">
+      <h3>السلام عليكم و رحمة الله 🤲</h3>
+      <p>أنا <b>Kada</b> مول محل <b style="color:var(--gold)">Crepes Sweet</b> هنا في عين وسارة. نرحب بيكم كيما تروحو لداركم نخدم البيتزا، الطاكوس، الكريب المقرمش و الطري، التشيز كيك و العصائر بجودة و نظافة.<br><br>السر تاعي بسيط: خدم كما تحب الخدمة ترجع ليك، و الزبون ما يخرجش حتى يكون فرحان. جرب معانا مرة، و راح تولي زبون دائم بإذن الله ❤️</p>
+      <div class="sign">— Kada, Crepes Sweet</div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <a class="btn btn-o" href="tel:0793655512">📞 0793655512</a>
+        <a class="btn btn-o" href="https://wa.me/213793655512" target="_blank">💬 واتساب</a>
+      </div>
+    </div>
+  </div>
+  <div class="p2-cta" id="p2c">
+    <button class="btn btn-w" onclick="goPage('pg3')">🏠 Home — دخول للمنيو</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 3 : المنيو ============ -->
+<div class="page" id="pg3">
+  <div class="topbar">
+    <a class="brand" href="#" onclick="goPage('pg1',-1);return false">
+      <img src="assets/logo.jpg?v=3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" alt="logo">
+      <div class="fb" style="display:none">🥞</div>
+      <div><b>Crepes <span>Sweet</span></b></div>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <a class="fb-top" href="https://www.facebook.com/kada.katalony" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.5h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+      </a>
+      <a class="btn btn-w" style="padding:9px 18px;font-size:.88rem" href="tel:0793655512">📞 0793655512</a>
+    </div>
+  </div>
+
+  <div class="hero3d" id="mhome">
+    <h2 id="heroH"><span class="out">CREPES</span> <span class="fill">SWEET</span></h2>
+    <div class="specs"><span>📍 <b>Ain Oussara</b></span><span>🛵 <b>Livraison disponible</b></span><span>📞 <b>0793655512</b></span></div>
+  </div>
+
+  <section>
+    <h2 class="menu-title" id="menuTitle"><span class="m-out">ME</span><span class="m-fill">NU</span></h2>
+    <div class="filters" id="filters">
+      <button class="on" data-f="all">الكل</button><button data-f="pizza">🍕 بيتزا</button><button data-f="tacos">🌮 طاكوس</button>
+      <button data-f="sucre">🍫 حلو</button><button data-f="sale">🧀 مالح</button><button data-f="cheese">🍰 تشيز</button><button data-f="jus">🧋 عصائر</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="gal">
+    <div class="sec-tag">PHOTOS RÉELLES</div>
+    <div class="sec-h">تصاور المحل 📸</div>
+    <p class="sec-p">حط الصور في <b>assets/gallery/1.jpg ... 6.jpg</b> يبانو وحدهم هنا</p>
+    <div class="gal" id="galBox"></div>
+  </section>
+
+  <section id="ct">
+    <div class="sec-tag">CONTACTS</div>
+    <div class="sec-h">تواصل معانا 📞</div>
+    <div class="cgrid">
+      <div class="box" style="text-align:center">
+        <div style="font-size:44px">📞</div>
+        <a class="bigphone" href="tel:0793655512">0793655512</a>
+        <div style="color:var(--teal);font-weight:800">📍 Djelfa / Ain Oussara</div>
+        <div style="color:var(--pink);font-weight:800">🛵 Livraison disponible</div>
+        <a class="wabig" href="https://wa.me/213793655512" target="_blank">💬 اطلب واتساب</a>
+        <a class="fbbig" href="https://www.facebook.com/kada.katalony" target="_blank">📘 فايسبوك</a>
+      </div>
+      <div class="box">
+        <h3>⏰ الأوقات + العنوان</h3>
+        <p style="color:#c9c2d6;line-height:2.2;margin-top:8px">🗓️ السبت - الخميس : <b style="color:var(--gold)">10:00 — 23:00</b><br>🕘 الجمعة : <b style="color:var(--gold)">14:00 — 23:00</b><br>🛵 التوصيل : <b style="color:var(--gold)">11:00 — 22:30</b><br><br>📍 <b>عين وسارة، ولاية الجلفة</b><br><a href="https://www.google.com/maps/search/?api=1&query=Ain+Oussara+Djelfa" target="_blank" style="color:var(--teal);font-weight:800">🗺️ قوقل مابس</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>🥞 <b style="color:#ffe6a3">Crepes Sweet — Salé & Sucré</b> © 2026 — عين وسارة 💛 — 📞 0793655512 — <a href="https://www.facebook.com/kada.katalony" target="_blank">Facebook</a><br><a href="#" onclick="goPage('pg1',-1);return false" style="color:#7a7490;font-size:.8rem">↺ رجوع للصفحة الأولى</a></footer>
+</div>
+
+<a id="waF" href="https://wa.me/213793655512" target="_blank">💬</a>
+
+<script>
+/* ================= PAGE MANAGER (أنيميشن إحترافي 3D) ================= */
+let cur='pg1';
+function goPage(id,dir){
+  const from=document.getElementById(cur), to=document.getElementById(id);
+  if(cur===id)return;
+  dir=dir||1;
+  gsap.to(from,{duration:.5,x:dir*-70,opacity:0,scale:.9,filter:'blur(8px)',ease:'power3.in',onComplete:()=>{
+    from.classList.remove('on');gsap.set(from,{clearProps:'all'});
+    to.classList.add('on');to.scrollTop=0;
+    gsap.fromTo(to,{x:dir*70,opacity:0,scale:1.07,filter:'blur(8px)'},{duration:.75,x:0,opacity:1,scale:1,filter:'blur(0px)',ease:'power3.out'});
+    if(id==='pg2')animChef(); if(id==='pg3')animMenu();
+    document.getElementById('waF').style.display=(id==='pg3')?'flex':'none';
+    cur=id;
+  }});
+}
+/* page2 intro */
+function animChef(){
+  const tl=gsap.timeline();
+  tl.from('#p2h',{y:-50,opacity:0,duration:.7,ease:'back.out(1.6)'})
+    .from('#p2s',{y:-20,opacity:0,duration:.5},'-=.3')
+    .from('#p2p',{x:80,rotateY:50,opacity:0,duration:.8,ease:'power3.out'},'-=.2')
+    .from('#p2b',{x:-80,rotateY:-50,opacity:0,duration:.8,ease:'power3.out'},'-=.6')
+    .from('#p2c',{y:40,opacity:0,duration:.6,ease:'back.out(1.5)'},'-=.2');
+}
+/* page3 menu entrance : أنيميشن 3D إحترافية */
+let menuAnimDone=false;
+function animMenu(){
+  const tl=gsap.timeline();
+  tl.from('.topbar',{y:-70,opacity:0,duration:.6,ease:'power2.out'})
+    .from('#heroH',{scale:.5,opacity:0,rotateX:-60,duration:.9,ease:'back.out(1.4)'},'-=.2')
+    .from('#mhome p,#mhome .specs',{y:25,opacity:0,stagger:.12,duration:.5},'-=.4');
+  // بطاقات المنيو تدخل 3D
+  gsap.fromTo('.card',{y:90,opacity:0,rotateX:-45,scale:.85},
+    {y:0,opacity:1,rotateX:0,scale:1,duration:.7,stagger:{each:.05,from:'start'},ease:'power3.out',delay:.5});
+  gsap.from('.filters button',{y:-25,opacity:0,stagger:.05,duration:.4,delay:.3});
+  if(!menuAnimDone&&window.ScrollTrigger){
+    gsap.utils.toArray('#pg3 section').forEach(s=>{gsap.from(s,{y:60,opacity:0,duration:.8,scrollTrigger:{trigger:s,start:'top 88%'}});});
+    menuAnimDone=true;
+  }
+}
+/* page1 intro : فيديو ملء الشاشة + المحتوى فوقو */
+function animP1(){
+  const tl=gsap.timeline({delay:.15});
+  tl.fromTo('#p1w',{y:-40,opacity:0},{y:0,opacity:1,duration:.8,ease:'power3.out'})
+    .fromTo('#p1t',{scale:.75,y:60,opacity:0},{scale:1,y:0,opacity:1,duration:1,ease:'back.out(1.3)'},'-=.35')
+    .fromTo('#p1c',{y:45,opacity:0},{y:0,opacity:1,duration:.65,ease:'back.out(1.6)'},'-=.4')
+    .fromTo('.p1-note',{opacity:0},{opacity:1,duration:.6},'-=.2');
+  // جزيئات ذهبية عشوائية
+  const bg=document.getElementById('p1bg');
+  if(!bg.dataset.p){bg.dataset.p=1;
+    for(let i=0;i<16;i++){const d=document.createElement('div');d.className='part';
+      d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+      d.style.animationDelay=(Math.random()*6)+'s';
+      d.style.background=['#ffbe3c','#0fb5a0','#ff2e7e'][i%3];
+      bg.appendChild(d);}
+  }
+}
+/* نظام الفيديو : محلي intro.mp4 أولاً ← فايسبوك ← خلفية اللوغو المتحركة */
+(function(){
+  const vid=document.getElementById('p1vid');
+  const fb=document.getElementById('p1video');
+  const bg=document.getElementById('p1bg');
+  const FB_URL='https://www.facebook.com/plugins/video.php?href=https%3A//www.facebook.com/share/r/1CdYLpmHAh/&show_text=false&width=1280&autoplay=true';
+  // نجرب الفيديو المحلي أولاً (أسرع و أضمن — يخدم حتى بـ file://)
+  const probe=document.createElement('video');
+  probe.muted=true;
+  probe.onloadeddata=()=>{ // يوجد intro.mp4
+    vid.src='assets/intro.mp4';
+    vid.style.display='block';
+    bg.style.display='none';
+    vid.play().catch(()=>{});
+  };
+  probe.onerror=()=>{ // ما كاينش محلي → نجرب فايسبوك (الخلفية تبقى تحتو ديما كي فشل يبان اللوغو)
+    fb.src=FB_URL;
+    fb.style.display='block';
+  };
+  probe.src='assets/intro.mp4';
+  // آيفون : بعض الحالات يلزم لمسة أولى باش يمشي الفيديو — نجربو تلقائي
+  const tryPlay=()=>{if(vid.style.display==='block'){vid.muted=true;vid.play().catch(()=>{});}};
+  document.addEventListener('touchstart',tryPlay,{once:true,passive:true});
+  document.addEventListener('click',tryPlay,{once:true});
+})();
+/* ================= MENU DATA ================= */
+const P=[
+ ['pizza','🍕','بيتزا مارغريتا','صوص + موزاريلا','350 دج'],['pizza','🍕','بيتزا 4 أجبان','4 أنواع جبن','650 دج'],
+ ['pizza','🍕','بيتزا دجاج','دجاج + جبن','500 دج'],['pizza','🍕','بيتزا لحم','لحم + جبن','550 دج'],
+ ['pizza','🐟','بيتزا تونة','تونة + زيتون','500 دج'],['pizza','🌟','Special Sweet','خلطة الشاف','700 دج'],
+ ['tacos','🌮','طاكوس دجاج','دجاج + فريت + جبن','400 دج'],['tacos','🌮','طاكوس لحم','لحم + فريت','450 دج'],
+ ['tacos','🌮','طاكوس ميكس XL','دجاج + لحم','600 دج'],['tacos','🧀','طاكوس جبن زيادة','صوص ×2','550 دج'],
+ ['sucre','🍫','كريب نوتيلا','نوتيلا أصلية','250 دج'],['sucre','🍌','نوتيلا موز','الأكثر طلبا','300 دج'],
+ ['sucre','🍓','نوتيلا فراولة','فراز طازجة','350 دج'],['sucre','🍫','كريب كيندر','كيندر + بوفية','400 دج'],
+ ['sucre','🥜','كريب بيستاش','فستق فاخر','450 دج'],['sucre','🍯','كريب عسل لوز','عسل حر + لوز','300 دج'],
+ ['sale','🧀','كريب جبن','3 أجبان','250 دج'],['sale','🍗','كريب دجاج جبن','دجاج + صوص','350 دج'],
+ ['sale','🐟','كريب تونة','تونة + بيض','350 دج'],['sale','🍳','كريب البيض','بيض + جبن','300 دج'],
+ ['cheese','🍰','تشيز كلاسيك','كريمة الجبن','350 دج'],['cheese','🍫','تشيز نوتيلا','نوتيلا + بندق','400 دج'],
+ ['cheese','🍓','تشيز فراولة','فراولة','400 دج'],['cheese','🍪','تشيز أوريو','أوريو + كريمة','400 دج'],
+ ['cheese','🥜','تشيز بيستاش','فستق حلبي','500 دج'],
+ ['jus','🍊','عصير برتقال','فري 100%','150 دج'],['jus','🍹','باناشي','3 طبقات','250 دج'],
+ ['jus','🥛','ميلكشيك نوتيلا','نوتيلا + حليب','300 دج'],['jus','🍪','ميلكشيك أوريو','أوريو + فانيليا','300 دج'],
+ ['jus','🍋','موهيتو','نعناع + ليمون','200 دج'],
+];
+const BG={pizza:'linear-gradient(135deg,#3a0d0d,#a31515)',tacos:'linear-gradient(135deg,#3a2400,#c47a00)',sucre:'linear-gradient(135deg,#3a071c,#c2145a)',sale:'linear-gradient(135deg,#032622,#0c7a6a)',cheese:'linear-gradient(135deg,#1c0f3d,#6a3ae0)',jus:'linear-gradient(135deg,#07293d,#1c8ac9)'};
+const grid=document.getElementById('grid');
+function render(f='all'){
+  grid.innerHTML='';
+  P.filter(p=>f==='all'||p[0]===f).forEach(p=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML=`<div class="t" style="background:${BG[p[0]]}">${p[1]}</div><div class="b"><h3>${p[2]}</h3><p>${p[3]}</p><div class="pr">${p[4]}</div></div>`;
+    grid.appendChild(d);
+  });
+}
+render();
+document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  render(b.dataset.f);
+  gsap.from('.card',{y:50,opacity:0,rotateX:-35,duration:.5,stagger:.04,ease:'power3.out'});
+});
+function orderWA(n){window.open('https://wa.me/213793655512?text='+encodeURIComponent('سلام Crepes Sweet 😋 حاب نطلب: '+n),'_blank');}
+/* gallery */
+const galBox=document.getElementById('galBox');const gEm=['🍕','🌮','🥞','🍰','🧋','🍫'];
+for(let i=1;i<=6;i++){
+  const d=document.createElement('div');d.className='g';
+  d.innerHTML=`<img src="assets/gallery/${i}.jpg?v=3" alt="photo ${i}"><span style="font-size:60px">${gEm[i-1]}</span>`;
+  const im=d.querySelector('img');
+  im.onerror=()=>{if(!im.dataset.t){im.dataset.t=1;im.src=`assets/gallery/${i}.png?v=3`}else im.style.display='none'};
+  im.onload=()=>{d.querySelector('span').style.display='none'};
+  galBox.appendChild(d);
+}
+/* burger removed — topbar simplified */
+/* ================= WHEEL REMOVED — VIDEO INTRO ================= */
+/* ================= أنيميشن البداية ================= */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('loader').classList.add('hide');animP1();},900);
+});
+setTimeout(()=>{if(!document.getElementById('loader').classList.contains('hide')){document.getElementById('loader').classList.add('hide');animP1();}},4000);
+</script>
+</body>
+</html>
